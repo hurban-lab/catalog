@@ -11,7 +11,7 @@ public class HelloController {
     @Value("${spring.application.name:catalog}")
     private String appName;
 
-    @RequestMapping("/hello")
+    @RequestMapping("/catalog/hello")
     public ResponseEntity<String> hello() {
         return new ResponseEntity<>("Hello " + appName, HttpStatus.OK);
     }
