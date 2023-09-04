@@ -22,7 +22,7 @@ public class HelloControllerTest {
 
     @Test
     public void helloShouldReturnDefaultMessage() throws Exception {
-        assertTrue(this.restTemplate.getForObject("http://localhost:" + port + "/hello",
+        assertTrue(this.restTemplate.getForObject("http://localhost:" + port + "/catalog/hello",
                 String.class).contains("Hello " + appName));
     }
 }
