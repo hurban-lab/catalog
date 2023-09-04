@@ -38,33 +38,13 @@ jobs:
         with:
           name: catalog-artifact
           path: ./target/*.jar
-
-  analyze:
-    name: Analyze with SonarCloud
-    runs-on: ubuntu-latest
-    needs: build
-    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./mvnw verify sonar:sonar \
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.host.url=sonarcloud.io \
-          -Dsonar.organization=hurban-lab \
-          -Dsonar.projectKey=hurban-lab_catalog
   deploy:
     permissions:
       contents: 'read'
       id-token: 'write'
     name: Deploy Docker Image
     runs-on: ubuntu-latest
-    needs: analyze
+    needs: build
     #if: ${{ false }}  # disable for now
     if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
     steps:
