@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: catalog-service
+product:
+  host: http://product-service:8080
+  get-hello-uri: /product/hello
