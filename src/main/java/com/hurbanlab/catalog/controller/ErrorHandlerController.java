@@ -22,7 +22,7 @@ public class ErrorHandlerController {
                                                             Exception exception) {
         ErrorDescription error = ErrorDescription.buildError(DefaultErrorCodes.GENERIC_ERROR,
                 moduleName, exception, request);
-        log.error(error);
+        log.error(exception.getMessage(), exception);
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
