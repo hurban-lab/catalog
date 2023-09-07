@@ -1,6 +1,7 @@
 package com.hurbanlab.catalog.controller;
 
 import com.hurbanlab.catalog.service.ProductService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/catalog")
+@Log4j2
 public class HelloController {
 
     @Value("${spring.application.name:catalog}")
@@ -22,13 +24,14 @@ public class HelloController {
 
     @RequestMapping("/hello")
     public ResponseEntity<String> hello() {
+        log.info("Retrieving greetings");
         return new ResponseEntity<>("Hello " + appName, HttpStatus.OK);
     }
 
 
     @RequestMapping("/products")
     public ResponseEntity<String> getProducts() {
-
+        log.info("Retrieving products");
         return new ResponseEntity<>(productService.getProductHello(), HttpStatus.OK);
     }
 }

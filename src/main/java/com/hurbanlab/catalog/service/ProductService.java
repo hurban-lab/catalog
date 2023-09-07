@@ -1,5 +1,6 @@
 package com.hurbanlab.catalog.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@Log4j2
 public class ProductService {
 
     private String productHost;
@@ -29,6 +31,7 @@ public class ProductService {
 
     public String getProductHello() {
         String fooResourceUrl = productHost + uri;
+        log.info("Getting Products from " + fooResourceUrl);
         ResponseEntity<String> response
                 = restTemplate.getForEntity(fooResourceUrl, String.class);
         return response.getBody();
