@@ -3,3 +3,6 @@ server:
 product:
   host: http://localhost:9090
   get-hello-uri: /product/hello
+grafana:
+  otlp:
+    enabled: false
