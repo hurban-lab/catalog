@@ -1,14 +1,17 @@
 package com.hurbanlab.catalog.controller;
 
+import com.hurbanlab.catalog.error.DefaultErrorCodes;
+import com.hurbanlab.catalog.error.ErrorDescription;
 import com.hurbanlab.catalog.service.ProductService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.ResponseEntity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -39,5 +42,14 @@ public class HelloControllerTest {
         when(productService.getProductHello()).thenReturn(greetings);
         assertTrue(this.restTemplate.getForObject("http://localhost:" + port + "/catalog/products",
                 String.class).contains(greetings));
+    }
+
+    @Test
+    public void getProductsShouldThrowError() throws Exception {
+        String greetings = "Hello product";
+        when(productService.getProductHello()).thenThrow(new RuntimeException("Crash"));
+        ErrorDescription response = this.restTemplate.getForObject("http://localhost:" + port + "/catalog/products", ErrorDescription.class);
+
+        assertEquals(DefaultErrorCodes.GENERIC_ERROR, response.getCode());
     }
 }

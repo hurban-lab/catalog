@@ -1,11 +1,33 @@
 <configuration>
-    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    <springProperty scope="context" name="application_name" source="spring.application.name"/>
+    <springProperty scope="context" name="profile_active" source="spring.profiles.active"/>
+    <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "severity": "%level",
+                        "app": "${application_name}",
+                        "profiles": "${profile_active}",
+                        "thread": "%thread",
+                        "class": "%class",
+                        "logger": "%logger",
+                        "user": "%X{userId:--}",
+                        "trace" : "%X{traceId:--}",
+                        "span": "%X{spanId:--}",
+                        "message": "%message",
+                        "exception": "%ex"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
     </appender>
-    <logger name="jsonLogger" additivity="false" level="DEBUG">
-        <appender-ref ref="consoleAppender"/>
-    </logger>
     <root level="INFO">
-        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="jsonConsoleAppender"/>
     </root>
 </configuration>
