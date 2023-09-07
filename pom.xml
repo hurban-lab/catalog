@@ -32,6 +32,13 @@
 			<artifactId>logstash-logback-encoder</artifactId>
 			<version>7.4</version>
 		</dependency>
+		<!-- Observability -->
+		<dependency>
+			<groupId>com.grafana</groupId>
+			<artifactId>grafana-opentelemetry-starter</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
