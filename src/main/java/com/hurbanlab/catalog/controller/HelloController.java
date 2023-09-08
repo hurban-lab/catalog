@@ -1,5 +1,7 @@
 package com.hurbanlab.catalog.controller;
 
+import com.hurbanlab.catalog.error.DefaultErrorCodes;
+import com.hurbanlab.catalog.error.ResourceNotFoundError;
 import com.hurbanlab.catalog.service.ProductService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,11 @@ public class HelloController {
     public ResponseEntity<String> getProducts() {
         log.info("Retrieving products");
         return new ResponseEntity<>(productService.getProductHello(), HttpStatus.OK);
+    }
+
+    @RequestMapping("/error")
+    public ResponseEntity<String> error() throws ResourceNotFoundError {
+        log.warn("Retrieving error");
+        throw new ResourceNotFoundError(DefaultErrorCodes.RESOURCE_NOT_FOUND_ERROR, "Error resource not found");
     }
 }

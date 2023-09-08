@@ -2,6 +2,7 @@ package com.hurbanlab.catalog.controller;
 
 import com.hurbanlab.catalog.error.DefaultErrorCodes;
 import com.hurbanlab.catalog.error.ErrorDescription;
+import com.hurbanlab.catalog.error.ResourceNotFoundError;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,4 +27,12 @@ public class ErrorHandlerController {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler({ResourceNotFoundError.class})
+    public ResponseEntity<ErrorDescription> handleException(HttpServletRequest request,
+                                                            ResourceNotFoundError exception) {
+        ErrorDescription error = ErrorDescription.buildError(DefaultErrorCodes.RESOURCE_NOT_FOUND_ERROR,
+                moduleName, exception, request);
+        log.error(exception.getMessage(), exception);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }
