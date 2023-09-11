@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/catalog")
 @Log4j2
-public class HelloController {
+public class CatalogController {
 
     @Value("${spring.application.name:catalog}")
     private String appName;
 
     private ProductService productService;
-    public HelloController(@Autowired ProductService productService){
+    public CatalogController(@Autowired ProductService productService){
         this.productService = productService;
     }
 

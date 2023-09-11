@@ -87,6 +87,14 @@ jobs:
             us-east1-docker.pkg.dev/hurban-lab/store/catalog:${{ steps.get-tag.outputs.short_ref }}
             us-east1-docker.pkg.dev/hurban-lab/store/catalog:latest
 
+  deploy:
+    name: Restart Service
+    steps:
+      - id: authenticate-gcp
+        name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACC }}'
       - id: catalog-deploy-sandbox
         if: (github.ref == 'refs/heads/develop')
         name: Deploy Service to Sandbox
