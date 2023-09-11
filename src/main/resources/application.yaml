@@ -5,3 +5,21 @@ spring:
     banner-mode: off
   profiles:
     active: local
+management:
+  info:
+    java:
+      enabled: true
+    env:
+      enabled: true
+    build:
+      enabled: true
+  endpoints:
+    web:
+      base-path: /catalog
+      exposure:
+        include: health,info
+info:
+  app:
+    name: ${spring.application.name}
+    description: @project.description@
+    version: @project.version@

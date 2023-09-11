@@ -87,7 +87,25 @@ jobs:
             us-east1-docker.pkg.dev/hurban-lab/store/catalog:${{ steps.get-tag.outputs.short_ref }}
             us-east1-docker.pkg.dev/hurban-lab/store/catalog:latest
 
+  deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    name: Deploy and Restart service
+    runs-on: ubuntu-latest
+    needs: push
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+    steps:
+      - id: authenticate-gcp
+        name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACC }}'
       - id: catalog-deploy-sandbox
         if: (github.ref == 'refs/heads/develop')
         name: Deploy Service to Sandbox
         run: kubectl rollout restart deployment catalog-deploy --namespace=store-sandbox
+      - id: catalog-deploy-prod
+        if: (github.ref == 'refs/heads/main')
+        name: Deploy Service to Production
+        run: kubectl rollout restart deployment catalog-deploy --namespace=store-prod
