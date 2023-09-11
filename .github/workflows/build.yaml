@@ -106,7 +106,7 @@ jobs:
         uses: google-github-actions/get-gke-credentials@v1
         with:
           cluster_name: 'store-sandbox-cluster'
-          location: 'us-east-1'
+          location: 'us-east1'
       - id: catalog-deploy-sandbox
         if: (github.ref == 'refs/heads/develop')
         name: Deploy Service to Sandbox
