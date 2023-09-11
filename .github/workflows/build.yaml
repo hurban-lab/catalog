@@ -101,6 +101,12 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACC }}'
+      - id: get-credentials-sandbox
+        if: (github.ref == 'refs/heads/develop')
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: 'store-sandbox-cluster'
+          location: 'us-east-1'
       - id: catalog-deploy-sandbox
         if: (github.ref == 'refs/heads/develop')
         name: Deploy Service to Sandbox
