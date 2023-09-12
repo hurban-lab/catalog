@@ -100,18 +100,24 @@ jobs:
         name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: '${{ secrets.GCP_SERVICE_ACC }}'
-      - id: get-credentials-sandbox
+          credentials_json: ${{ secrets.GCP_SERVICE_ACC }}
+      - id: get-credentials-develop
         if: (github.ref == 'refs/heads/develop')
         uses: google-github-actions/get-gke-credentials@v1
         with:
-          cluster_name: 'store-sandbox-cluster'
-          location: 'us-east1'
+          cluster_name: ${{ secrets.GCP_CLUSTER_DEVELOP }}
+          location: ${{ secrets.GCP_REGION_GLOBAL }}
+      - id: get-credentials-prod
+        if: (github.ref == 'refs/heads/main')
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ secrets.GCP_CLUSTER_MAIN }}
+          location: ${{ secrets.GCP_REGION_GLOBAL }}
       - id: catalog-deploy-sandbox
         if: (github.ref == 'refs/heads/develop')
         name: Deploy Service to Sandbox
-        run: kubectl rollout restart deployment catalog-deploy --namespace=store-sandbox
+        run: kubectl rollout restart deployment catalog-deploy --namespace=${{ secrets.GCP_NAMESPACE_DEVELOP }}
       - id: catalog-deploy-prod
         if: (github.ref == 'refs/heads/main')
         name: Deploy Service to Production
-        run: kubectl rollout restart deployment catalog-deploy --namespace=store-prod
+        run: kubectl rollout restart deployment catalog-deploy --namespace=${{ secrets.GCP_NAMESPACE_MAIN }}
