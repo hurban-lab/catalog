@@ -32,6 +32,31 @@ jobs:
         name: Test
         run: ./mvnw -B verify
 
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          junit_files: target/surefire-reports/*.xml
+
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+
+      - id: jacoco
+        name: Add coverage to PR
+        uses: madrapps/jacoco-report@v1.6.1
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 60
+          title: Code Coverage
+          continue-on-error: false
+          update-comment: true
+
       - id: publish
         name: Publish Artifact
         uses: actions/upload-artifact@master
@@ -75,7 +100,7 @@ jobs:
 
       - name: Get tag
         id: get-tag
-        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+        run: echo "short_ref=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
       - id: docker-push-tagged
         uses: docker/build-push-action@v2
