@@ -92,7 +92,7 @@ jobs:
           access_token_lifetime: 300s
       - id: login
         name: Login to Artifact Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: us-east1-docker.pkg.dev
           username: oauth2accesstoken
@@ -103,7 +103,7 @@ jobs:
         run: echo "short_ref=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
       - id: docker-push-tagged
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         name: Tag Docker image and push to Google Artifact Registry
         with:
           context: .
@@ -121,6 +121,10 @@ jobs:
     needs: push
     if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
     steps:
+      - id: checkout
+        name: Checkout Repository
+        uses: actions/checkout@v3
+
       - id: authenticate-gcp
         name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
