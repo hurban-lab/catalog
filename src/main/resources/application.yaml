@@ -23,3 +23,5 @@ info:
     name: ${spring.application.name}
     description: @project.description@
     version: @project.version@
+product:
+  get-hello-uri: /product/hello
