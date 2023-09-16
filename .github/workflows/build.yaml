@@ -46,13 +46,16 @@ jobs:
 
       - id: jacoco
         name: Add coverage to PR
-        uses: madrapps/jacoco-report@v1.2
+        uses: madrapps/jacoco-report@v1.6.1
         if: ${{ github.event_name == 'pull_request' }}
         with:
           paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 60
+          title: Code Coverage
+          continue-on-error: false
+          update-comment: true
 
       - id: publish
         name: Publish Artifact
